@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  contextPath: /SpringBootRestApi
+  
+spring:
+  h2:
+    console:
+      enabled: true
+  
+spring.datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test;MODE=MySQL

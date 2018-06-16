@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -20,21 +21,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(long id) {
         List<User> users = userRepository.readUsers();
-        User user = users.stream()
+        return users.stream()
                 .filter(u -> u.getId() == id)
                 .findFirst()
-                .get();
-        return (user != null) ? user : null;
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     public User findByName(String name) {
         List<User> users = userRepository.readUsers();
-        User user = users.stream()
+        return users.stream()
                 .filter(u -> name.equals(u.getName()))
                 .findFirst()
-                .get();
-        return (user != null) ? user : null;
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Override

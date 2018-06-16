@@ -1,6 +1,5 @@
 package com.iknowhow.springboot.controller;
 
-import com.iknowhow.springboot.exception.UserNotFoundException;
 import com.iknowhow.springboot.model.User;
 import com.iknowhow.springboot.service.UserService;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +33,6 @@ public class RestApiController {
 	}
 
 	// -------------------Retrieve Single User------------------------------------------
-
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") long id) {
 		return new ResponseEntity(userService.findById(id), HttpStatus.OK);

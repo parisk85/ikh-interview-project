@@ -1,5 +1,6 @@
 package com.iknowhow.springboot.controller;
 
+import com.iknowhow.springboot.exception.UserNotFoundException;
 import com.iknowhow.springboot.model.User;
 import com.iknowhow.springboot.service.UserService;
 import org.slf4j.Logger;
@@ -39,7 +40,6 @@ public class RestApiController {
 	}
 
 	// -------------------Create a User-------------------------------------------
-
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 		URI location = ServletUriComponentsBuilder.fromCurrentServletMapping().path("/user/{id}").build().expand(user.getId()).toUri();

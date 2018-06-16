@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
-
+	//TODO: to log or not to log http://www.baeldung.com/spring-http-logging
 	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
 
 	@Autowired
@@ -44,6 +44,7 @@ public class RestApiController {
 		HttpHeaders httpHeaders = new HttpHeaders();
 		httpHeaders.setLocation(location);
 		userService.saveUser(user);
+		logger.debug("Created: " + user.toString());
 		return new ResponseEntity(userService.findById(user.getId()), httpHeaders, HttpStatus.CREATED);
 	}
 
@@ -54,6 +55,7 @@ public class RestApiController {
 		userService.findById(id);
 		user.setId(id);
 		userService.updateUser(user);
+		logger.debug("Updated: " + user.toString());
 		return new ResponseEntity(userService.findById(id), HttpStatus.OK);
 	}
 
@@ -62,6 +64,7 @@ public class RestApiController {
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
 		userService.deleteUserById(id);
+		logger.debug("Deleted: " + userService.findById(id).toString());
 		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 	}
 
@@ -70,6 +73,7 @@ public class RestApiController {
 	@RequestMapping(value = "/user/", method = RequestMethod.DELETE)
 	public ResponseEntity<User> deleteAllUsers() {
 		userService.deleteAllUsers();
+		logger.debug("All users deleted.");
 		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 	}
 

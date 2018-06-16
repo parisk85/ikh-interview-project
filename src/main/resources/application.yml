@@ -10,3 +10,8 @@ spring:
 spring.datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:test;MODE=MySQL
+
+logging:
+  file: springBootRestApi.log
+  level:
+    com.iknowhow.springboot.controller: debug

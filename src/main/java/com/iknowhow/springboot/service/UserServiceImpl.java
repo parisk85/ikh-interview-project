@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void saveUser(User user) {
         List<User> users = userRepository.readUsers();
-        long lastIndex = users.get(users.size() - 1).getId();
+        //TODO: check if user already exist
+        long lastIndex = (users.isEmpty()) ? 0 : users.get(users.size() - 1).getId();
         user.setId(++lastIndex);
         userRepository.createUser(user);
     }
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
     @CachePut(value = "users")
     @Transactional
     public void deleteUserById(long id) {
+        //TODO: check postman "error"
         if (isUserExist(findById(id))) {
             userRepository.deleteUser(id);
         }

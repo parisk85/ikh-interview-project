@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class RestApiController {
-	//TODO: to log or not to log http://www.baeldung.com/spring-http-logging
 	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
 
 	@Autowired

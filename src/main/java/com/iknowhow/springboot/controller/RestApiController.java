@@ -52,10 +52,11 @@ public class RestApiController {
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+		logger.debug("Updating user: " + user.toString() + "...");
 		userService.findById(id);
 		user.setId(id);
 		userService.updateUser(user);
-		logger.debug("Updated: " + user.toString());
+		logger.debug("Updated");
 		return new ResponseEntity(userService.findById(id), HttpStatus.OK);
 	}
 
@@ -63,8 +64,9 @@ public class RestApiController {
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
+		logger.debug("Deleting: " + userService.findById(id).toString() + "...");
 		userService.deleteUserById(id);
-		logger.debug("Deleted: " + userService.findById(id).toString());
+		logger.debug("Deleted.");
 		return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
 	}
 

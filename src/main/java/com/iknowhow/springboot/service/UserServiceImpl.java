@@ -1,5 +1,6 @@
 package com.iknowhow.springboot.service;
 
+import com.iknowhow.springboot.exceptions.UserNotFoundException;
 import com.iknowhow.springboot.model.User;
 import com.iknowhow.springboot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -24,7 +25,7 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .filter(u -> u.getId() == id)
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .filter(u -> name.equals(u.getName()))
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
@@ -41,7 +42,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void saveUser(User user) {
         List<User> users = userRepository.readUsers();
-        //TODO: check if user already exist
         long lastIndex = (users.isEmpty()) ? 0 : users.get(users.size() - 1).getId();
         user.setId(++lastIndex);
         userRepository.createUser(user);
@@ -51,19 +51,20 @@ public class UserServiceImpl implements UserService {
     @CachePut(value = "users")
     @Transactional
     public void updateUser(User user) {
-        if (isUserExist(user)) {
-            userRepository.updateUser(user);
-        }
+        Optional
+                .ofNullable(isUserExist(user))
+                .orElseThrow(UserNotFoundException::new);
+        userRepository.updateUser(user);
     }
 
     @Override
     @CachePut(value = "users")
     @Transactional
     public void deleteUserById(long id) {
-        //TODO: check postman "error"
-        if (isUserExist(findById(id))) {
-            userRepository.deleteUser(id);
-        }
+        Optional
+                .ofNullable(isUserExist(findById(id)))
+                .orElseThrow(UserNotFoundException::new);
+        userRepository.deleteUser(id);
     }
 
     @Override
